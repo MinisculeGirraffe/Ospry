@@ -6,6 +6,7 @@ export default () => {
     const [serverObj, setServerObj] = React.useState({})
     const [user, setUser] = React.useState('')
     const [isLoading, setIsLoading] = React.useState(false);
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
     const lookupServers = async () => {
         auth.vultr.server.list()
         .then(data =>  { return setServerObj(data)})
@@ -23,6 +24,12 @@ export default () => {
         }
         fetchInitalData()
     },[])
+    const refreshServerList = async () => {
+        setIsRefreshing(true)
+        lookupServers()
+        .then(setIsRefreshing(false))
+
+    }
     
-    return [lookupServers,serverObj,user,isLoading];
+    return [lookupServers,refreshServerList,serverObj,user,isLoading,isRefreshing];
 }

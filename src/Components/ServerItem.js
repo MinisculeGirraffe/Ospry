@@ -23,7 +23,7 @@ export default ServerItem = ({ server }) => {
                 <Button
                     appearance='ghost'
                     accessoryRight={props => <Icon {...props} name='power' />}
-                    status={serverStatus}
+                    status={serverStatus}                   
                 />
             </Layout>
         </Card>
