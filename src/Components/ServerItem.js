@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, Layout, TopNavigation, Text, List, ListItem, Spinner, Card, Icon, } from '@ui-kitten/components';
+import { Button, Layout, Text, Card, Icon, } from '@ui-kitten/components';
 
 export default ServerItem = ({ server }) => {
     const [serverStatus, setSetverStatus] = useState('')
@@ -23,7 +23,7 @@ export default ServerItem = ({ server }) => {
                 <Button
                     appearance='ghost'
                     accessoryRight={props => <Icon {...props} name='power' />}
-                    status={serverStatus}                   
+                    status={serverStatus}
                 />
             </Layout>
         </Card>

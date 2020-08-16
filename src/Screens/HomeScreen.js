@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Divider, Layout, TopNavigation, Text, List, Spinner, } from '@ui-kitten/components';
+import { Layout, TopNavigation, Text, List, Spinner, } from '@ui-kitten/components';
 import useApiLookup from '../Hooks/UseAPILookup'
 import ServerItem from '../Components/ServerItem'
 import { RefreshControl } from '../Components/RefreshControl'
