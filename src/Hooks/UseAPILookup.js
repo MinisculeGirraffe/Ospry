@@ -23,6 +23,6 @@ export default () => {
         }
         fetchInitalData()
     },[])
-
+    
     return [lookupServers,serverObj,user,isLoading];
 }
