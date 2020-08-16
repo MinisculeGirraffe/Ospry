@@ -3,6 +3,7 @@ import { Layout, Button, Input } from '@ui-kitten/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthContext from '../Hooks/AuthContext'
 import { Keyboard } from 'react-native'
+import * as WebBrowser from 'expo-web-browser';
 
 export const LoginScreen = ({ navigation }) => {
     const [value, setValue] = React.useState('');
@@ -17,18 +18,21 @@ export const LoginScreen = ({ navigation }) => {
             Keyboard.removeListener("keyboardDidHide");
         };
     }, []);
-
+    _handlePressButtonAsync = async () => {
+        let result = await WebBrowser.openBrowserAsync('https://my.vultr.com/settings/#settingsapi');
+      };
     return (
         <SafeAreaView style={{flex:1}}>
             <Layout style={{ flex: 1,  alignItems: 'center' }}>
                 <Input
                     value={value}
-                    placeholder='Active'
+                    placeholder='API Key'
                     onChangeText={nextValue => setValue(nextValue)}
                 />
                 <Button
                     onPress={() => auth.saveApiKey(value)}
                 > Sign in</Button>
+                 <Button title="Open WebBrowser" onPress={this._handlePressButtonAsync}> Get API Key </Button>
             </Layout>
 
         </SafeAreaView>
