@@ -2,7 +2,7 @@ import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BottomNavigation, BottomNavigationTab, Layout, Text } from '@ui-kitten/components';
+import { BottomNavigation, BottomNavigationTab, Layout, Text, Icon } from '@ui-kitten/components';
 
 import { HomeScreen } from '../Screens/HomeScreen';
 import { SettingsScreen } from '../Screens/SettingsScreen';
@@ -52,8 +52,8 @@ const BottomTabBar = ({ navigation, state }) => (
     <BottomNavigation
         selectedIndex={state.index}
         onSelect= {index => navigation.navigate(state.routeNames[index])}>
-        <BottomNavigationTab title='Home' />
-        <BottomNavigationTab title='Settings' />
+        <BottomNavigationTab title='Home' icon={props => <Icon {...props} name='home-outline'/>} />
+        <BottomNavigationTab title='Settings' icon={props => <Icon {...props} name='settings-outline'/>}/>
     </BottomNavigation>
     </SafeAreaView>
 )

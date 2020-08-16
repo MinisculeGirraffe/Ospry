@@ -9,6 +9,7 @@ export const HomeScreen = ({ navigation }) => {
     const [lookupServers, refreshServerList, serverObj, user, isLoading, isRefreshing] = useApiLookup()
     if (isLoading == false) {
         return (
+            <Layout style={{ flex: 1, }}>
             <SafeAreaView style={{ flex: 1, }}>
                 <Layout style={{ flex: 1, }}>
                     <TopNavigation
@@ -25,9 +26,11 @@ export const HomeScreen = ({ navigation }) => {
                                 />}
                         />
                     </Layout>
-
+                                
                 </Layout>
             </SafeAreaView>
+            </Layout>
+
         )
     } else {
         return (
