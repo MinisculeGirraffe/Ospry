@@ -33,5 +33,5 @@ export default () => {
         
     }
     
-    return [lookupServers,refreshServerList,serverObj,user,isLoading,isRefreshing];
+    return {lookupServers,refreshServerList,serverObj,user,isLoading,isRefreshing};
 }
