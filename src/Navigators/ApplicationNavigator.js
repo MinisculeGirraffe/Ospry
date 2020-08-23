@@ -51,19 +51,20 @@ const BottomTabBar = ({ navigation, state }) => (
 
     <BottomNavigation
         selectedIndex={state.index}
-        onSelect= {index => navigation.navigate(state.routeNames[index])}>
+        onSelect= {index => navigation.navigate(state.routeNames[index])}
+        >
         <BottomNavigationTab title='Home' icon={props => <Icon {...props} name='home-outline'/>} />
         <BottomNavigationTab title='Settings' icon={props => <Icon {...props} name='settings-outline'/>}/>
+    
     </BottomNavigation>
     </SafeAreaView>
 )
 
 const BottomTabNavigatior = ({ state }) => {
     return (
-
         <TabNavigator.Navigator tabBar={props => <BottomTabBar {...props} />}>
-            <TabNavigator.Screen name='Home' component={HomeStackScreen} />
-            <TabNavigator.Screen name='Settings' component={SettingsStackScreen}/>
+            <TabNavigator.Screen name='Home' component={HomeScreen} />
+            <TabNavigator.Screen name='Settings' component={SettingsScreen}/>
         </TabNavigator.Navigator>
     )
 }

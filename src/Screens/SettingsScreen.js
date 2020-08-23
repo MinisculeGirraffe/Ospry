@@ -10,7 +10,7 @@ export const SettingsScreen = ({ navigation }) => {
     return (
         <Layout style={{ flex: 1 }}>
             <SafeAreaView style={{ flex: 1 }}>
-                <Layout style={{ flex: 1, alignItems: 'center' }}>
+            <Layout style={{ flex: 1, alignItems: 'center' }}>
                     <Input
                         placeholder={auth.apiKey}
                         value={value}

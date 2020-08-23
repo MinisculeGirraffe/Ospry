@@ -4,13 +4,16 @@ import { Button, Layout, Text, Card, Icon, } from '@ui-kitten/components';
 export default ServerItem = ({ server }) => {
     const [serverStatus, setSetverStatus] = useState('')
     useEffect(() => {
+        console.log("List Item Code Ran")
         if (server.power_status == 'running') {
             setSetverStatus('success')
+            
         } else {
             setSetverStatus('danger')
         }
     }, [server])
     return (
+        
         <Card status={serverStatus}>
             <Layout style={{
                 flexDirection: 'row',

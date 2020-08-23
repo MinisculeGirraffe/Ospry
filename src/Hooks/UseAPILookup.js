@@ -15,12 +15,14 @@ export default () => {
     const lookupUser = async () => {
         auth.vultr.api.getInfo()
         .then(data => setUser(data))
+        
     }
     React.useEffect(() => {
         const fetchInitalData = async() => {
             setIsLoading(true)
             Promise.all(lookupServers(),lookupUser())
             .then(setIsLoading(false))
+            
         }
         fetchInitalData()
     },[])
@@ -28,7 +30,7 @@ export default () => {
         setIsRefreshing(true)
         lookupServers()
         .then(setIsRefreshing(false))
-
+        
     }
     
     return [lookupServers,refreshServerList,serverObj,user,isLoading,isRefreshing];
