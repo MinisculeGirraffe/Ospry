@@ -8,6 +8,7 @@ import { renderRightActions } from '../Components/AddNewServer'
 export const HomeScreen = ({ navigation }) => {
     const api = useApiLookup()
     const [serverKeys, setServerKeys] = useState()
+
     useEffect(() => {
         if (api.serverObj) {
             setServerKeys(Object.keys(api.serverObj))
@@ -15,7 +16,7 @@ export const HomeScreen = ({ navigation }) => {
 
     }, [api.serverObj])
 
-    if (api.isLoading == false && api.serverObj) {
+    if (api.isLoading == false || api.serverObj == null) {
         return (
             <Layout style={{ flex: 1, }}>
                 <SafeAreaView style={{ flex: 1, }}>

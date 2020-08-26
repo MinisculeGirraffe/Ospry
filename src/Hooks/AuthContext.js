@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
             .then((userToken) => {
                 if (userToken) {
                     let init = VultrNode.initialize({ apiKey: userToken })
-                    console.log("ran")
                     SetVultrKey(init)
                     setApiKey(userToken)
                 }

@@ -17,21 +17,33 @@ export default () => {
         .then(data => setUser(data))
         
     }
-    React.useEffect(() => {
-        const fetchInitalData = async() => {
-            setIsLoading(true)
-            Promise.all(lookupServers(),lookupUser())
-            .then(setIsLoading(false))
-            
-        }
-        fetchInitalData()
-    },[])
+
     const refreshServerList = async () => {
         setIsRefreshing(true)
         lookupServers()
         .then(setIsRefreshing(false))
         
     }
-    
-    return {lookupServers,refreshServerList,serverObj,user,isLoading,isRefreshing};
+
+    const rebootServer = async (serverID) => {
+        let rebootObj = {
+            SUBID: Number(serverID)
+        }
+        console.log(rebootObj)
+        auth.vultr.server.halt(rebootObj)
+        .then(data => console.log(data))
+        .catch(err => console.log(err))
+    }
+
+    React.useEffect(() => {
+        const fetchInitalData = async() => {
+            setIsLoading(true)
+            Promise.all(lookupServers(),lookupUser())
+            .then(setIsLoading(false))
+            .catch(err => console.log(err))
+            
+        }
+        fetchInitalData()
+    },[])
+    return {lookupServers,refreshServerList,rebootServer,serverObj,user,isLoading,isRefreshing};
 }
