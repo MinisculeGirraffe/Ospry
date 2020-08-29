@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Button, Layout, Text, Card, Icon, } from '@ui-kitten/components';
 import { Alert } from 'react-native';
 import useApiLookup from '../Hooks/UseAPILookup'
-export default ServerItem = ({ server }) => {
+import { useNavigation } from '@react-navigation/native';
+
+export default ServerItem = ({ server,index }) => {
     const [serverStatus, setSetverStatus] = useState('')
     const api = useApiLookup()
+    const navigation = useNavigation()
     useEffect(() => {
+        
         if (server.power_status == 'running') {
             setSetverStatus('success')
 
@@ -24,13 +28,21 @@ export default ServerItem = ({ server }) => {
                     style: "cancel"
                 },
                 { text: "OK", onPress: () =>  api.rebootServer(server.SUBID)}
-            ],
-            { cancelable: false }
+            ],{
+                 cancelable: false 
+                }
         )
     }
-    return (
 
-        <Card status={serverStatus}>
+    const nagivateServer = () => {
+        api.lookupServers()
+        navigation.navigate("Details",{
+            serverIndex: index
+        })
+    }
+
+    return (
+        <Card status={serverStatus} onPress={() => nagivateServer()}>
             <Layout style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -39,7 +51,7 @@ export default ServerItem = ({ server }) => {
                 justifyContent: "space-between",
                 flexGrow: '1'
             }}>
-                <Text category={"h6"}>{server.label ? server.label : server.os}</Text>
+                <Text category={"h6"}>{server.label}</Text>
                 <Button
                     appearance='ghost'
                     accessoryRight={props => <Icon {...props} name='power' />}

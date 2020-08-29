@@ -7,6 +7,7 @@ import { BottomNavigation, BottomNavigationTab, Layout, Text, Icon } from '@ui-k
 import { HomeScreen } from '../Screens/HomeScreen';
 import { SettingsScreen } from '../Screens/SettingsScreen';
 import { LoginScreen } from '../Screens/LoginScreen'
+import {ServerDetails} from '../Screens/ServerDetails'
 import AuthContext from '../Hooks/AuthContext'
 import { SafeAreaView } from 'react-native';
 
@@ -22,6 +23,10 @@ const HomeStackScreen = () => {
             <HomeStackNavigator.Screen
                 name="Home"
                 component={HomeScreen}
+            />
+            <HomeStackNavigator.Screen
+                name="Details"
+                component={ServerDetails}
             />
         </HomeStackNavigator.Navigator>
     );
@@ -63,7 +68,7 @@ const BottomTabBar = ({ navigation, state }) => (
 const BottomTabNavigatior = ({ state }) => {
     return (
         <TabNavigator.Navigator tabBar={props => <BottomTabBar {...props} />}>
-            <TabNavigator.Screen name='Home' component={HomeScreen} />
+            <TabNavigator.Screen name='Home' component={HomeStackScreen} />
             <TabNavigator.Screen name='Settings' component={SettingsScreen}/>
         </TabNavigator.Navigator>
     )

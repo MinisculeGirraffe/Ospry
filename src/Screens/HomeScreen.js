@@ -7,16 +7,8 @@ import { RefreshControl } from '../Components/RefreshControl'
 import { renderRightActions } from '../Components/AddNewServer'
 export const HomeScreen = ({ navigation }) => {
     const api = useApiLookup()
-    const [serverKeys, setServerKeys] = useState()
 
-    useEffect(() => {
-        if (api.serverObj) {
-            setServerKeys(Object.keys(api.serverObj))
-        }
-
-    }, [api.serverObj])
-
-    if (api.isLoading == false || api.serverObj == null) {
+    if (api.isLoading == false && api.serverObj !== null) {
         return (
             <Layout style={{ flex: 1, }}>
                 <SafeAreaView style={{ flex: 1, }}>
@@ -27,8 +19,8 @@ export const HomeScreen = ({ navigation }) => {
                         />
                         <Layout style={{ display: 'flex', overflow: 'visible', flexDirection: 'column', flexGrow: '1' }}>
                             <List
-                                data={serverKeys}
-                                renderItem={object => <ServerItem {...object} server={api.serverObj[object.item]} />}
+                                data={api.serverObj}
+                                renderItem={item => <ServerItem server={api.serverObj[item.index]} index={item.index} />}
                                 refreshControl={
                                     <RefreshControl
                                         refreshing={api.isRefreshing}
