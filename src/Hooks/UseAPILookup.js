@@ -55,7 +55,7 @@ export default () => {
             .then(setIsRefreshing(false))
     }
 
-    const rebootServer = async (serverID) => {
+    const rebootServer = (serverID) => {
         let rebootObj = {
             SUBID: Number(serverID)
         }
@@ -71,7 +71,6 @@ export default () => {
             Promise.all(lookupServers(), lookupUser(), lookupServerPlans())
                 .then(setIsLoading(false))
                 .catch(err => console.log(err))
-
         }
         fetchInitalData()
     }, [])

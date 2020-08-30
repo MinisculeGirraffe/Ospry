@@ -3,7 +3,7 @@ import { Button, Layout, Text, Card, Icon, } from '@ui-kitten/components';
 import { Alert } from 'react-native';
 import useApiLookup from '../Hooks/UseAPILookup'
 import { useNavigation } from '@react-navigation/native';
-
+import * as Linking from 'expo-linking'
 export default ServerItem = ({ server,index }) => {
     const [serverStatus, setSetverStatus] = useState('')
     const api = useApiLookup()
