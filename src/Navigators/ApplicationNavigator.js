@@ -8,6 +8,9 @@ import { HomeScreen } from '../Screens/HomeScreen';
 import { SettingsScreen } from '../Screens/SettingsScreen';
 import { LoginScreen } from '../Screens/LoginScreen'
 import {ServerDetails} from '../Screens/ServerDetails'
+import {AddServerScreen} from '../Screens/AddServerScreen'
+
+
 import AuthContext from '../Hooks/AuthContext'
 import { SafeAreaView } from 'react-native';
 
@@ -27,6 +30,10 @@ const HomeStackScreen = () => {
             <HomeStackNavigator.Screen
                 name="Details"
                 component={ServerDetails}
+            />
+            <HomeStackNavigator.Screen
+                name="Add"
+                component={AddServerScreen}
             />
         </HomeStackNavigator.Navigator>
     );

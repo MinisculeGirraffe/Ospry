@@ -6,6 +6,9 @@ export default () => {
     const [user, setUser] = React.useState('')
     const [isLoading, setIsLoading] = React.useState(false);
     const [isRefreshing, setIsRefreshing] = React.useState(false);
+
+    const [serverAvailability, setServerAvailability] = React.useState()
+
     const lookupServers = async () => {
         auth.vultr.server.list()
             .then((data) => {
@@ -16,14 +19,31 @@ export default () => {
                             data[key].label = data[key].os
                         }
                         arr.push(data[key])
-
                     })
-                    setServerObj(arr)
-
+                setServerObj(arr)
             })
-
             .catch(err => console.log(err))
     }
+
+    const lookupServerPlans = async () => {
+        auth.vultr.plans.list()
+            .then(data => {
+                let test = Object.keys(data)
+                    .reduce((acc, cur) => {
+                        let planType = data[cur].plan_type
+                        if (acc.plans[planType] == null) {
+                            acc.plans[planType] = []
+                            acc.plans[planType].push(data[cur])
+                        }
+                        else {
+                            acc.plans[planType].push(data[cur])
+                        }
+                        return acc
+                    }, { plans: {} })
+                setServerAvailability(test)
+            })
+    }
+
     const lookupUser = async () => {
         auth.vultr.api.getInfo()
             .then(data => setUser(data))
@@ -48,12 +68,12 @@ export default () => {
     React.useEffect(() => {
         const fetchInitalData = async () => {
             setIsLoading(true)
-            Promise.all(lookupServers(), lookupUser())
+            Promise.all(lookupServers(), lookupUser(), lookupServerPlans())
                 .then(setIsLoading(false))
                 .catch(err => console.log(err))
 
         }
         fetchInitalData()
     }, [])
-    return { lookupServers, refreshServerList, rebootServer, serverObj, user, isLoading, isRefreshing };
+    return { lookupServers, refreshServerList, rebootServer, serverObj, user, isLoading, isRefreshing, serverAvailability };
 }

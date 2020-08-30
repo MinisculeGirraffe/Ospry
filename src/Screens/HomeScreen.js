@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Layout, TopNavigation, Text, List, Spinner, } from '@ui-kitten/components';
+import { Layout, TopNavigation, Text, List, Spinner, Divider, Avatar, TopNavigationAction, Icon } from '@ui-kitten/components';
 import useApiLookup from '../Hooks/UseAPILookup'
 import ServerItem from '../Components/ServerItem'
 import { RefreshControl } from '../Components/RefreshControl'
-import { renderRightActions } from '../Components/AddNewServer'
+
 export const HomeScreen = ({ navigation }) => {
     const api = useApiLookup()
+    const userAvatar = () => {
+        return (
+            <TopNavigationAction
+                icon={(props) => <Icon {...props} name='person' />}
+            />
+        )
+    }
 
+    const addNewServer = () => {
+        return (
+            <TopNavigationAction
+                icon={(props) => <Icon {...props} name='plus-outline' />}
+                onPress={() => navigation.navigate('Add')}
+            />
+        )
+    }
     if (api.isLoading == false && api.serverObj !== null) {
         return (
             <Layout style={{ flex: 1, }}>
@@ -15,8 +30,10 @@ export const HomeScreen = ({ navigation }) => {
                     <Layout style={{ flex: 1, }}>
                         <TopNavigation
                             title={props => <Text {...props}>{api.user.name}</Text>}
-                            accessoryRight={renderRightActions}
+                            accessoryLeft={userAvatar}
+                            accessoryRight={addNewServer}
                         />
+                        <Divider />
                         <Layout style={{ display: 'flex', overflow: 'visible', flexDirection: 'column', flexGrow: '1' }}>
                             <List
                                 data={api.serverObj}

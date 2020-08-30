@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export const AddServerScreen = ({ navigation }) => {
 
     return (
-        <Layout>
+        <Layout style={{flex:1}}>
             <SafeAreaView>
 
             </SafeAreaView>
