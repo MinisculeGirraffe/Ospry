@@ -5,6 +5,8 @@ import useApiLookup from '../Hooks/UseAPILookup'
 import ServerItem from '../Components/ServerItem'
 import { RefreshControl } from '../Components/RefreshControl'
 
+
+
 export const HomeScreen = ({ navigation }) => {
     const api = useApiLookup()
     const userAvatar = () => {
@@ -25,29 +27,27 @@ export const HomeScreen = ({ navigation }) => {
     }
     if (api.isLoading == false && api.serverObj !== null) {
         return (
-            <Layout style={{ flex: 1, }}>
-                <SafeAreaView style={{ flex: 1, }}>
-                    <Layout style={{ flex: 1, }}>
-                        <TopNavigation
-                            title={props => <Text {...props}>{api.user.name}</Text>}
-                            accessoryLeft={userAvatar}
-                            accessoryRight={addNewServer}
-                        />
-                        <Divider />
-                        <Layout style={{ display: 'flex', overflow: 'visible', flexDirection: 'column', flexGrow: '1' }}>
-                            <List
-                                data={api.serverObj}
-                                renderItem={item => <ServerItem server={api.serverObj[item.index]} index={item.index} />}
-                                refreshControl={
-                                    <RefreshControl
-                                        refreshing={api.isRefreshing}
-                                        onRefresh={async () => await api.refreshServerList()}
-                                    />}
-                            />
-                        </Layout>
-                    </Layout>
-                </SafeAreaView>
-            </Layout>
+            <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'top']} >
+                <TopNavigation
+                    title={props => <Text {...props}>{api.user.name}</Text>}
+                    accessoryLeft={userAvatar}
+                    accessoryRight={addNewServer}
+                />
+                <Divider />
+                <Layout style={{ flex: 1 }}>
+                    <List
+                        data={api.serverObj}
+                        renderItem={item => <ServerItem server={api.serverObj[item.index]} index={item.index} />}
+                        contentContainerStyle={{ alignItems: "stretch" }}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={api.isRefreshing}
+                                onRefresh={async () => await api.refreshServerList()}
+                            />}
+                    />
+                </Layout>
+
+            </SafeAreaView>
 
         )
     } else {

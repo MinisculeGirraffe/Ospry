@@ -4,12 +4,11 @@ import { Alert } from 'react-native';
 import useApiLookup from '../Hooks/UseAPILookup'
 import { useNavigation } from '@react-navigation/native';
 import * as Linking from 'expo-linking'
-export default ServerItem = ({ server,index }) => {
+export default ServerItem = ({ server, index }) => {
     const [serverStatus, setSetverStatus] = useState('')
     const api = useApiLookup()
     const navigation = useNavigation()
     useEffect(() => {
-        
         if (server.power_status == 'running') {
             setSetverStatus('success')
 
@@ -17,28 +16,47 @@ export default ServerItem = ({ server,index }) => {
             setSetverStatus('danger')
         }
     }, [server])
-    const warnPowerOff = () => {
-        Alert.alert(
-            "Warning",
-            "Are you sure you want to shutdown",
-            [
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                },
-                { text: "OK", onPress: () =>  api.rebootServer(server.SUBID)}
-            ],{
-                 cancelable: false 
-                }
-        )
+    const toggleState = () => {
+        if (server.power_status == 'running') {
+            Alert.alert(
+                "Warning",
+                "Are you sure you want to shutdown",
+                [
+                    {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                    },
+                    { text: "OK", onPress: () => api.stopServer(server.SUBID) }
+                ], {
+                cancelable: false
+            }
+            )
+        } else {
+            Alert.alert(
+                "Warning",
+                "Are you sure you want to start",
+                [
+                    {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                    },
+                    { text: "OK", onPress: () => api.startServer(server.SUBID) }
+                ], {
+                cancelable: false
+            }
+            )
+        }
     }
 
     const nagivateServer = () => {
-        api.lookupServers()
-        navigation.navigate("Details",{
+
+        navigation.navigate("Details", {
             serverIndex: index
         })
+
+
     }
 
     return (
@@ -56,7 +74,7 @@ export default ServerItem = ({ server,index }) => {
                     appearance='ghost'
                     accessoryRight={props => <Icon {...props} name='power' />}
                     status={serverStatus}
-                    onPress={() => warnPowerOff()}
+                    onPress={() => toggleState()}
                 />
             </Layout>
             <Layout style={{

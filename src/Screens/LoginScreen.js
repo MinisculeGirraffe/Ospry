@@ -23,16 +23,19 @@ export const LoginScreen = ({ navigation }) => {
       };
     return (
         <SafeAreaView style={{flex:1}}>
-            <Layout style={{ flex: 1,  alignItems: 'center' }}>
+            <Layout style={{ flex: 1,  alignItems: 'center', }}>
                 <Input
                     value={value}
                     placeholder='API Key'
                     onChangeText={nextValue => setValue(nextValue)}
                 />
+                <Layout style={{flexDirection: "row",alignItems: "center" , alignSelf: "stretch" , justifyContent: "space-evenly"}}>
                 <Button
                     onPress={() => auth.saveApiKey(value)}
                 > Sign in</Button>
-                 <Button title="Open WebBrowser" onPress={this._handlePressButtonAsync}> Get API Key </Button>
+                 <Button title="Open WebBrowser" onPress={_handlePressButtonAsync}> Get API Key </Button>
+                </Layout>
+
             </Layout>
 
         </SafeAreaView>

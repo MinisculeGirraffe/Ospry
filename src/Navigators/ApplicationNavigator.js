@@ -10,27 +10,27 @@ import { LoginScreen } from '../Screens/LoginScreen'
 import { ServerDetails } from '../Screens/ServerDetails'
 import { AddServerScreen } from '../Screens/AddServerScreen'
 
+import { CardStyleInterpolators } from '@react-navigation/stack';
 
 import AuthContext from '../Hooks/AuthContext'
 import { SafeAreaView } from 'react-native';
+
+
 
 const TabNavigator = createBottomTabNavigator();
 const HomeStackNavigator = createStackNavigator();
 const SettingsStackNavigator = createStackNavigator();
 const LoginStackNavigator = createStackNavigator()
 
-
-
 const HomeStackScreen = () => {
     const theme = useTheme()
-
     return (
         <HomeStackNavigator.Navigator screenOptions={{
             cardStyle: { backgroundColor: theme['background-basic-color-1'] }
         }}
             headerMode={"none"}>
             <HomeStackNavigator.Screen
-                name="Home"
+                name="Servers"
                 component={HomeScreen}
             />
             <HomeStackNavigator.Screen
@@ -38,6 +38,11 @@ const HomeStackScreen = () => {
                 component={ServerDetails}
             />
             <HomeStackNavigator.Screen
+                options={{
+                    cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+                    gestureDirection: "vertical",
+                    
+                }}
                 name="Add"
                 component={AddServerScreen}
             />
@@ -56,33 +61,43 @@ const SettingsStackScreen = () => {
 }
 
 const LoginStackScreen = () => {
+    const theme = useTheme()
     return (
-        <LoginStackNavigator.Navigator>
+        <LoginStackNavigator.Navigator screenOptions={{
+            cardStyle: { backgroundColor: theme['background-basic-color-1'] }
+        }}>
             <LoginStackNavigator.Screen name='Login' component={LoginScreen} />
         </LoginStackNavigator.Navigator>
     )
 }
 
-const BottomTabBar = ({ navigation, state }) => (
-    <SafeAreaView>
-
-
+const BottomTabBar = ({ navigation, state }) => {
+    const theme = useTheme()
+    return(
+        <SafeAreaView style={{backgroundColor: theme['background-basic-color-1']}}>
         <BottomNavigation
             selectedIndex={state.index}
             onSelect={index => navigation.navigate(state.routeNames[index])}
-
         >
-            <BottomNavigationTab title='Home' icon={props => <Icon {...props} name='home-outline' />} />
+            <BottomNavigationTab title='Servers' icon={props => <Icon {...props} name='hard-drive-outline' />} />
+            <BottomNavigationTab title='DNS' icon={props => <Icon {...props} name='globe-2-outline' />} />
+            <BottomNavigationTab title='Load Balancers' icon={props => <Icon {...props} name='move-outline' />} />
             <BottomNavigationTab title='Settings' icon={props => <Icon {...props} name='settings-outline' />} />
-
         </BottomNavigation>
     </SafeAreaView>
-)
+    )
+
+}
+    
+
+
 
 const BottomTabNavigatior = ({ state }) => {
     return (
         <TabNavigator.Navigator tabBar={props => <BottomTabBar {...props} />}>
             <TabNavigator.Screen name='Home' component={HomeStackScreen} />
+            <TabNavigator.Screen name='DNS' component={HomeStackScreen} />
+            <TabNavigator.Screen name='Load Balancers' component={HomeStackScreen} />
             <TabNavigator.Screen name='Settings' component={SettingsScreen} />
         </TabNavigator.Navigator>
     )

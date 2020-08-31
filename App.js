@@ -8,6 +8,7 @@ import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import { StatusBar } from 'expo-status-bar';
 
 import { AuthProvider } from './src/Hooks/AuthContext'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 export default () => {
@@ -22,14 +23,17 @@ export default () => {
     <>
       <IconRegistry icons={EvaIconsPack} />
       <AppearanceProvider>
-        <ApplicationProvider {...eva} theme={colorScheme == "dark" ? eva.dark : eva.light} >
-          <StatusBar style='auto'/>
-          <AuthProvider>
-            <Layout style={{ flex: 1 }}>
-              <AppNavigator />
-            </Layout>
-          </AuthProvider>
-        </ApplicationProvider>
+        <SafeAreaProvider>
+
+          <ApplicationProvider {...eva} theme={colorScheme == "dark" ? eva.dark : eva.light} >
+            <StatusBar style='auto' />
+            <AuthProvider>
+              <AppNavigator>
+              </AppNavigator>
+            </AuthProvider>
+          </ApplicationProvider>
+
+        </SafeAreaProvider>
       </AppearanceProvider>
 
     </>
