@@ -3,10 +3,13 @@ import { Button, Layout, Text, Card, Icon, } from '@ui-kitten/components';
 import { Alert } from 'react-native';
 import useApiLookup from '../Hooks/UseAPILookup'
 import { useNavigation } from '@react-navigation/native';
-import * as Linking from 'expo-linking'
+import useAppFunction from "../Hooks/useAppFunction"
+
+
 export default ServerItem = ({ server, index }) => {
     const [serverStatus, setSetverStatus] = useState('')
     const api = useApiLookup()
+    const appFunction = useAppFunction()
     const navigation = useNavigation()
     useEffect(() => {
         if (server.power_status == 'running') {
@@ -86,7 +89,7 @@ export default ServerItem = ({ server, index }) => {
                 justifyContent: "space-between"
             }}>
                 <Text category='c1'>{server.location} - {server.ram}</Text>
-                <Text category='c1'> {server.main_ip}</Text>
+                <Text onPress={() => appFunction.openLink('ssh://' + server.main_ip)} status={'info'} category='s1'> {server.main_ip}</Text>
             </Layout>
 
         </Card>

@@ -46,7 +46,6 @@ export const HomeScreen = ({ navigation }) => {
                             />}
                     />
                 </Layout>
-
             </SafeAreaView>
 
         )

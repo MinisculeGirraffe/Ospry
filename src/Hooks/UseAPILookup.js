@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { AuthContext } from './AuthContext'
+
 export default () => {
     const auth = React.useContext(AuthContext)
     const [serverObj, setServerObj] = React.useState([])
@@ -8,6 +9,9 @@ export default () => {
     const [isRefreshing, setIsRefreshing] = React.useState(false);
 
     const [serverAvailability, setServerAvailability] = React.useState()
+    const [serverLocations, setServerLocations] = React.useState()
+
+
 
     //Add Bare Metal integration
     const lookupServers = async () => {
@@ -26,6 +30,7 @@ export default () => {
                     data[key].auto_backups = false
                 }
 
+                /*
                 let backups = await auth.vultr.backup.list({ SUBID: Number(data[key].SUBID) })
                 let backupKeys = Object.keys(backups)
                 let backupArr = []
@@ -35,8 +40,8 @@ export default () => {
                     }
                     data[key].backups = BackupArr
                     console.log(data[key].backups)
-                }
-                let objectStorage
+                } */
+
                 arr.push(data[key])
             }
             return arr
@@ -47,14 +52,20 @@ export default () => {
             .catch(err => console.log(err))
     }
 
-
-
     const lookupServerPlans = async () => {
-        await auth.vultr.plans.list()
+        const locations = await auth.vultr.regions.list()
+            .then(data => setServerLocations(data))
+      await auth.vultr.plans.list()
             .then(data => {
-                let test = Object.keys(data)
+                let serverAvail = Object.keys(data)
                     .reduce((acc, cur) => {
                         let planType = data[cur].plan_type
+                        /*
+                        let planLocations = []
+                        planLocations.push(data[cur].available_locations.map(key => locations[key]))
+                        data[cur].available_locations = planLocations
+                        */
+
                         if (acc.plans[planType] == null) {
                             acc.plans[planType] = []
                             acc.plans[planType].push(data[cur])
@@ -62,11 +73,15 @@ export default () => {
                         else {
                             acc.plans[planType].push(data[cur])
                         }
+
+
                         return acc
                     }, { plans: {} })
-                setServerAvailability(test)
+                setServerAvailability(serverAvail)
             })
+            .catch(err => console.log(err))
     }
+
 
     const lookupUser = async () => {
         await auth.vultr.api.getInfo()
@@ -111,7 +126,7 @@ export default () => {
     React.useEffect(() => {
         const fetchInitalData = async () => {
             setIsLoading(true)
-            await Promise.all(lookupServers(), lookupUser(), lookupServerPlans())
+            await Promise.all(lookupServers(), lookupUser())
                 .then(setIsLoading(false))
                 .catch(err => console.log(err))
         }
@@ -125,10 +140,12 @@ export default () => {
         startServer,
         enableBackup,
         disableBackup,
+        lookupServerPlans,
         serverObj,
         user,
         isLoading,
         isRefreshing,
-        serverAvailability
+        serverAvailability,
+        serverLocations
     };
 }

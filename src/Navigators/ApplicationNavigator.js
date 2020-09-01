@@ -88,9 +88,6 @@ const BottomTabBar = ({ navigation, state }) => {
     )
 
 }
-    
-
-
 
 const BottomTabNavigatior = ({ state }) => {
     return (
