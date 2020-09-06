@@ -43,7 +43,10 @@ export const AddServerScreen = ({ navigation }) => {
                         filteredZone.push(foundLocation)
                     }
                 }
-                results[zone] = filteredZone
+                if(filteredZone.length > 0 ) {
+                    results[zone] = filteredZone
+                }
+               
             }
             return results
         }
