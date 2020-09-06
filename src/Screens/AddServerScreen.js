@@ -1,18 +1,60 @@
 import React from 'react'
-import { Layout, TopNavigation, TopNavigationAction, Icon, Divider, DrawerGroup, Drawer, DrawerItem, Text, Card, CheckBox } from '@ui-kitten/components'
+import { Layout, TopNavigation, TopNavigationAction, Icon, Divider, Text, Select, SelectGroup, SelectItem, DrawerGroup, Drawer, DrawerItem } from '@ui-kitten/components'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useApiLookup from '../Hooks/UseAPILookup'
 
 export const AddServerScreen = ({ navigation }) => {
 
     const [selectedType, setSelectedType] = React.useState("");
+    const [availServerPlans, setAvailServerPlans] = React.useState([])
     const [selectedPlan, setSelectedPlan] = React.useState("")
+    const [availLocations, setAvailLocations] = React.useState([])
+    const [selectedLocation, setSelectedLocation] = React.useState("")
+
     const api = useApiLookup()
     React.useEffect(() => {
         api.lookupServerPlans()
 
     }, [])
 
+    React.useEffect(() => {
+        if (selectedType) {
+            let typeText = Object.keys(api.serverAvailability.plans)[selectedType.row]
+            let plans = api.serverAvailability.plans[typeText]
+            if (plans !== availServerPlans) {
+                setSelectedPlan("")
+                setSelectedLocation("")
+            }
+            setAvailServerPlans(plans)
+
+        }
+    }, [selectedType])
+
+    React.useEffect(() => {
+        const getAvailPlans = async (locations) => {
+            const zones = Object.keys(api.serverLocations.continents)
+            const results = {}
+            const availLocationObjs = []
+            for (const zone of zones) {
+                const filteredZone = []
+                for (const location of locations) {
+                    let foundLocation = api.serverLocations.continents[zone].find(({ DCID }) => DCID == location)
+                    if (foundLocation !== undefined) {
+                        filteredZone.push(foundLocation)
+                    }
+                }
+                results[zone] = filteredZone
+            }
+            return results
+        }
+
+        if (availServerPlans.length > 0) {
+            let planLocations = availServerPlans[selectedPlan.row].available_locations
+            getAvailPlans(planLocations)
+                .then(data => setAvailLocations(data))
+        }
+
+    }, [selectedPlan])
 
 
     const goBack = () => (
@@ -21,80 +63,6 @@ export const AddServerScreen = ({ navigation }) => {
             onPress={() => navigation.goBack()}
         />
     )
-
-    const renderServerType = (props) => {
-        const selectType = (key) => {
-            if (key == selectedType) {
-                setSelectedType("")
-            } else {
-                setSelectedType(key)
-            }
-        }
-
-        return (
-            <Layout {...props} style={{ flex: 1 }} >
-                <Layout style={{ flexDirection: "row", alignItems: "center", alignSelf: "stretch", justifyContent: "space-evenly", flex: 1 }}>
-                    {Object.keys(api.serverAvailability.plans).map(key => {
-                        return (
-                            <Card
-                                onPress={() => selectType(key)}
-                                style={{ alignSelf: "stretch" }}
-                                status={selectedType == key ? 'info' : 'basic'}
-                            >
-                                <Text>{key}</Text>
-                            </Card>
-                        )
-                    })}
-                </Layout>
-
-            </Layout>
-        )
-    }
-
-    const renderPlan = (props) => {
-        const selectType = (planID) => {
-
-            if (planID == selectedPlan) {
-                setSelectedPlan("")
-            } else {
-                setSelectedPlan(planID)
-            }
-        }
-        if (selectedType !== "") {
-            return (
-                <Layout {...props} style={{ flex: 1 }} >
-                    <Layout style={{ flexDirection: "column", alignItems: "center", alignSelf: "stretch", overflow: "auto", flex: 0, flexGrow: 1 }}>
-                        {api.serverAvailability.plans[selectedType].map(key => {
-                            return (
-                                <Card
-                                    onPress={() => selectType(key.VPSPLANID)}
-                                    status={selectedPlan == key.VPSPLANID ? 'info' : 'basic'}>
-                                    <Text>{key.name}</Text>
-                                </Card>
-                            )
-                        })}
-                    </Layout>
-                </Layout>
-            )
-        }
-    }
-
-
-    const renderLocation = (props) => {
-        if (selectedType !== "" && selectedPlan !== "") {
-            const obj = api.serverAvailability.plans[selectedType].find(key => key.VPSPLANID = selectedPlan)
-
-            const locations = []
-            locations.push(obj.available_locations.map((key) => { api.serverLocations[key] }))
-
-            console.log(obj.available_locations)
-        }
-
-        return (
-            <Layout />
-        )
-
-    }
 
     if (api.serverAvailability !== undefined) {
         return (
@@ -105,31 +73,66 @@ export const AddServerScreen = ({ navigation }) => {
                     alignment="center"
                 />
                 <Divider />
-                <Layout>
-                    <Drawer appearance='noDivider'>
-                        <DrawerItem title="Server Type" />
-                        <DrawerItem style={{ flex: 1 }} accessoryLeft={(props) => renderServerType(props)} />
+                <Layout >
+                    <Text>Server Type</Text>
+                    <Select
+                        value={Object.keys(api.serverAvailability.plans)[selectedType.row]}
+                        selectedIndex={selectedType}
+                        onSelect={type => setSelectedType(type)}
+                    >
+                        {Object.keys(api.serverAvailability.plans).map(plan => {
+                            return (
+                                <SelectItem key={plan} title={plan}></SelectItem>
+                            )
 
-                        {selectedType !== "" ?
-                            <DrawerGroup title="Server Size">
-                                <DrawerItem style={{ flex: 1, flexGrow: 1 }} accessoryLeft={(props) => renderPlan(props)} />
-                            </DrawerGroup>
-                            : null}
+                        })}
+                    </Select>
 
-                        {selectedPlan !== "" ?
-                            <DrawerGroup title="Location">
-                                <DrawerItem style={{ flex: 1, flexGrow: 1 }} accessoryLeft={(props) => renderLocation(props)} />
-                            </DrawerGroup>
-                            : null}
+                    <Text>Server Plan</Text>
+                    <Select
+                        value={selectedPlan ? availServerPlans[selectedPlan.row].name : ""}
+                        selectedIndex={selectedPlan}
+                        onSelect={plan => setSelectedPlan(plan)}
+                        disabled={availServerPlans.length == 0 ? true : false}
+                    >
+                        {availServerPlans.map(plan => {
+                            return (
+                                <SelectItem key={plan.name} title={plan.name} />
+                            )
+                        })}
+                    </Select>
+                    <Text>Server Location</Text>
+                    <Select
+                        selectedIndex={selectedLocation}
+                        onSelect={location => setSelectedLocation(location)}
+                        disabled={availLocations.length == 0 ? true : false}
+                    >
+                        {Object.keys(availLocations).map(zone => {
+                            return (
+                                <SelectGroup key={zone} title={zone} >
+                                    {availLocations[zone].map(location => {
+                                        return (
+                                            <SelectItem key={location.name} title={location.name} />
+                                        )
+                                    })}
+                                </SelectGroup>
+                            )
 
-                        <DrawerGroup title="OS">
+                        })}
+                    </Select>
+                    <Text>Server OS</Text>
+                    <Select>
 
+                    </Select>
+                    <Drawer>
+                        <DrawerGroup title="Options">
+                            <DrawerItem title="Hostname" />
+                            <DrawerItem title="Label" />
+                            <DrawerItem title={"Auto Backups"} />
+                            <DrawerItem title={"IPv6"} />
+                            <DrawerItem title={"Private Networking"} />
                         </DrawerGroup>
-
-
-
                     </Drawer>
-
 
                 </Layout>
             </SafeAreaView>

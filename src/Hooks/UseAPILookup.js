@@ -11,8 +11,6 @@ export default () => {
     const [serverAvailability, setServerAvailability] = React.useState()
     const [serverLocations, setServerLocations] = React.useState()
 
-
-
     //Add Bare Metal integration
     const lookupServers = async () => {
         const transformData = async (data) => {
@@ -52,33 +50,49 @@ export default () => {
             .catch(err => console.log(err))
     }
 
+
     const lookupServerPlans = async () => {
-        const locations = await auth.vultr.regions.list()
-            .then(data => setServerLocations(data))
-      await auth.vultr.plans.list()
+
+        const transformLocations = async (locations) => {
+            const results = {
+                continents: {},
+                list: {}
+            }
+            results.list = locations
+            const locationCodes = Object.keys(locations)
+            for (const location of locationCodes) {
+                const currentLocation = locations[location]
+                if (results.continents[currentLocation.continent] == null) {
+                    results.continents[currentLocation.continent] = []
+                }
+                results.continents[currentLocation.continent].push(currentLocation)
+            }
+            return results
+        }
+
+        const transformPlans = async (plans) => {
+            const results = { plans: {} }
+            const planCode = Object.keys(plans)
+            for (const plan of planCode) {
+                const currentPlan = plans[plan]
+                if (currentPlan.available_locations.length > 0) {
+                    if (results.plans[currentPlan.plan_type] == null) {
+                        results.plans[currentPlan.plan_type] = []
+                    }
+                    results.plans[currentPlan.plan_type].push(currentPlan)
+                }
+            }
+            return results
+        }
+
+        await auth.vultr.plans.list({ type: "all" })
+            .then((data) => { return transformPlans(data) })
             .then(data => {
-                let serverAvail = Object.keys(data)
-                    .reduce((acc, cur) => {
-                        let planType = data[cur].plan_type
-                        /*
-                        let planLocations = []
-                        planLocations.push(data[cur].available_locations.map(key => locations[key]))
-                        data[cur].available_locations = planLocations
-                        */
-
-                        if (acc.plans[planType] == null) {
-                            acc.plans[planType] = []
-                            acc.plans[planType].push(data[cur])
-                        }
-                        else {
-                            acc.plans[planType].push(data[cur])
-                        }
-
-
-                        return acc
-                    }, { plans: {} })
-                setServerAvailability(serverAvail)
+                setServerAvailability(data)
+                return auth.vultr.regions.list()
             })
+            .then((data) => { return transformLocations(data) })
+            .then(data => setServerLocations(data))
             .catch(err => console.log(err))
     }
 
