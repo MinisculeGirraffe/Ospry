@@ -10,6 +10,7 @@ export default () => {
 
     const [serverAvailability, setServerAvailability] = React.useState()
     const [serverLocations, setServerLocations] = React.useState()
+    const [serverOS, setServerOS] = React.useState()
 
     //Add Bare Metal integration
     const lookupServers = async () => {
@@ -85,14 +86,48 @@ export default () => {
             return results
         }
 
+        const transformOS = async (osList) => {
+            const results = {}
+            const OSCodes = Object.keys(osList)
+
+            for (const os of OSCodes) {
+                const currentOS = osList[os]
+                if (currentOS.windows == false &&
+                    currentOS.family !== "snapshot" &&
+                    currentOS.family !== "iso" &&
+                    currentOS.family !== "backup" &&
+                    currentOS.family != "application") {
+                    if (results[currentOS.family] == null) {
+                        results[currentOS.family] = []
+                    }
+                    results[currentOS.family].push(currentOS)
+                }
+            }
+            return results
+        }
+
         await auth.vultr.plans.list({ type: "all" })
-            .then((data) => { return transformPlans(data) })
+            .then((data) => {
+                return transformPlans(data)
+            })
             .then(data => {
                 setServerAvailability(data)
                 return auth.vultr.regions.list()
             })
-            .then((data) => { return transformLocations(data) })
-            .then(data => setServerLocations(data))
+            .then((data) => {
+                return transformLocations(data)
+            })
+            .then(data => {
+                setServerLocations(data)
+                return auth.vultr.os.list()
+            })
+            .then(data => {
+                return transformOS(data)
+            })
+            .then(data => {
+                let sortedData = Object.keys(data).sort().reduce((acc, key) => ({ ...acc, [key]: data[key] }), {})
+                setServerOS(sortedData)
+            })
             .catch(err => console.log(err))
     }
 
@@ -160,6 +195,7 @@ export default () => {
         isLoading,
         isRefreshing,
         serverAvailability,
-        serverLocations
+        serverLocations,
+        serverOS
     };
 }
