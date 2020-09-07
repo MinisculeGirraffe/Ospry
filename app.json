@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "VultrApp",
-    "slug": "VultrApp",
+    "name": "Eagle",
+    "slug": "Eagle",
     "description": "A Opensource free app to access Vultr",
     "version": "1.0.0",
     "orientation": "portrait",
