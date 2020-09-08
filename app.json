@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Eagle",
-    "slug": "Eagle",
+    "name": "Ospry",
+    "slug": "Ospry",
     "description": "A Opensource free app to access Vultr",
-    "version": "1.0.0",
+    "version": "0.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -19,7 +19,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "red.nor.eagle"
     },
     "web": {
       "favicon": "./assets/favicon.png"
