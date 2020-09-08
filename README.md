@@ -1,3 +1,3 @@
-# Ospry
+# Osprey
 
-React Native + Expo app using the public API of vultr.com
+React native/Expo iOS/Adnroid app using the public API of vultr.com
