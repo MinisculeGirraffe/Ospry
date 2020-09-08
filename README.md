@@ -1,3 +1,3 @@
-# VultrApp
+# Ospry
 
-Very super broken app that does not work using the public API of vultr.com
+React Native + Expo app using the public API of vultr.com
