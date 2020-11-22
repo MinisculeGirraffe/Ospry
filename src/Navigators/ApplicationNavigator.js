@@ -4,11 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigation, BottomNavigationTab, useTheme, Icon } from '@ui-kitten/components';
 
-import { HomeScreen } from '../Screens/HomeScreen';
-import { SettingsScreen } from '../Screens/SettingsScreen';
+import { HomeScreen } from '../Screens/HomeStack/HomeScreen';
+import { SettingsScreen } from '../Screens/SettingStack/SettingsScreen';
 import { LoginScreen } from '../Screens/LoginScreen'
-import { ServerDetails } from '../Screens/ServerDetails'
-import { AddServerScreen } from '../Screens/AddServerScreen'
+import { ServerDetails } from '../Screens/HomeStack/ServerDetails'
+import { AddServerScreen } from '../Screens/HomeStack/AddServerScreen'
 
 import { CardStyleInterpolators } from '@react-navigation/stack';
 
@@ -80,7 +80,6 @@ const BottomTabBar = ({ navigation, state }) => {
             onSelect={index => navigation.navigate(state.routeNames[index])}
         >
             <BottomNavigationTab title='Servers' icon={props => <Icon {...props} name='hard-drive-outline' />} />
-            <BottomNavigationTab title='DNS' icon={props => <Icon {...props} name='globe-2-outline' />} />
             <BottomNavigationTab title='Settings' icon={props => <Icon {...props} name='settings-outline' />} />
         </BottomNavigation>
     </SafeAreaView>
@@ -92,7 +91,6 @@ const BottomTabNavigatior = ({ state }) => {
     return (
         <TabNavigator.Navigator tabBar={props => <BottomTabBar {...props} />}>
             <TabNavigator.Screen name='Home' component={HomeStackScreen} />
-            <TabNavigator.Screen name='DNS' component={HomeStackScreen} />
             <TabNavigator.Screen name='Settings' component={SettingsScreen} />
         </TabNavigator.Navigator>
     )

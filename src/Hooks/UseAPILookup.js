@@ -5,9 +5,10 @@ export default () => {
     const auth = React.useContext(AuthContext)
     const [serverObj, setServerObj] = React.useState([])
     const [user, setUser] = React.useState('')
+    const [account, setAccount] = React.useState('')
     const [isLoading, setIsLoading] = React.useState(false);
     const [isRefreshing, setIsRefreshing] = React.useState(false);
-
+    const [sshKeys, setSSHKeys] = React.useState();
     const [serverAvailability, setServerAvailability] = React.useState()
     const [serverLocations, setServerLocations] = React.useState()
     const [serverOS, setServerOS] = React.useState()
@@ -134,7 +135,7 @@ export default () => {
 
     const lookupUser = async () => {
         await auth.vultr.api.getInfo()
-            .then(data => setUser(data))
+        .then(data => setAccount(data))
     }
 
     const refreshServerList = async () => {
@@ -146,19 +147,25 @@ export default () => {
     const rebootServer = async (serverID) => {
         auth.vultr.server.reboot({ SUBID: parseInt(serverID) })
             .then(lookupServers())
-
     }
 
     const startServer = async (serverID) => {
         auth.vultr.server.start({ SUBID: parseInt(serverID) })
             .then(lookupServers())
-
     }
 
     const stopServer = async (serverID) => {
         auth.vultr.server.halt({ SUBID: parseInt(serverID) })
             .then(lookupServers())
+    }
 
+    const createServer = async (obj) => {
+        auth.vultr.server.create()
+    }
+
+    const lookupSSHKeys = async => {
+        auth.vultr.sshkey.list()
+        .then(data => setSSHKeys(data))
     }
 
     const enableBackup = async (serverID) => {
@@ -175,7 +182,7 @@ export default () => {
     React.useEffect(() => {
         const fetchInitalData = async () => {
             setIsLoading(true)
-            await Promise.all(lookupServers(), lookupUser())
+            await Promise.all(lookupServers(), lookupUser(), lookupSSHKeys())
                 .then(setIsLoading(false))
                 .catch(err => console.log(err))
         }
@@ -191,7 +198,9 @@ export default () => {
         disableBackup,
         lookupServerPlans,
         serverObj,
+        account,
         user,
+        sshKeys,
         isLoading,
         isRefreshing,
         serverAvailability,

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Layout, Text, TopNavigation, TopNavigationAction, Spinner, Divider, OverflowMenu, MenuItem, Icon, DrawerGroup, Drawer, DrawerItem, useTheme, CheckBox, Button } from '@ui-kitten/components'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native'
-import useApiLookup from '../Hooks/UseAPILookup'
+import { ScrollView, StyleSheet } from 'react-native'
+import useApiLookup from '../../Hooks/UseAPILookup'
 import * as Progress from 'react-native-progress';
-import useAppFunction from "../Hooks/useAppFunction"
+import useAppFunction from "../../Hooks/useAppFunction"
 
 export const ServerDetails = ({ route, navigation }) => {
     const { serverIndex } = route.params
@@ -14,36 +14,22 @@ export const ServerDetails = ({ route, navigation }) => {
     const [visible, setVisible] = React.useState(false);
     const [autoBackup, SetAutoBackup] = React.useState(false);
     const [currentServer, setCurrentServer] = React.useState()
-    
+
     React.useEffect((() => {
         setCurrentServer(api.serverObj[serverIndex])
         console.log(currentServer)
-    }),[api.serverObj])
+    }), [api.serverObj])
 
     const progressBar = () => {
         const theme = useTheme()
         return (
             <Layout style={{ flex: 1 }}>
-                <Layout style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    alignSelf: 'stretch',
-                    textAlign: 'center',
-                    justifyContent: "space-between",
-                    flexGrow: '1'
-                }}>
+                <Layout style={styles.subContainer}>
                     <Text>{currentServer.current_bandwidth_gb} GB</Text>
                     <Text>{currentServer.allowed_bandwidth_gb} GB</Text>
 
                 </Layout>
-                <Layout style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    alignSelf: 'stretch',
-                    textAlign: 'center',
-                    justifyContent: "space-between",
-                    flexGrow: '1'
-                }}>
+                <Layout style={styles.subContainer}>
                     <Progress.Bar
                         style={{ flex: 1 }}
                         borderRadius={2}
@@ -124,7 +110,7 @@ export const ServerDetails = ({ route, navigation }) => {
                                 <DrawerItem title="Username" accessoryRight={() => <Text>root</Text>} />
                                 <DrawerItem title="Password" accessoryRight={() => <Text>{currentServer.default_password}</Text>} />
                                 <DrawerItem title="KVM" accessoryRight={() => <Text onPress={() => appFunction.openLink(currentServer.kvm_url)} status={'info'}>link</Text>} />
-                                <DrawerItem title="SSH" accessoryRight={() => <Text onPress={() => appFunction.openLink('ssh://' + currentServer.main_ip) }  status={'info'}>{currentServer.main_ip}</Text>} />
+                                <DrawerItem title="SSH" accessoryRight={() => <Text onPress={() => appFunction.openLink('ssh://' + currentServer.main_ip)} status={'info'}>{currentServer.main_ip}</Text>} />
 
 
                             </DrawerGroup>
@@ -136,16 +122,9 @@ export const ServerDetails = ({ route, navigation }) => {
                                 <DrawerItem title="Main IPv6" accessoryRight={() => <Text selectable={true}>{currentServer.v6_main_ip}</Text>} />
                                 <DrawerItem title="Subnet IPv6" accessoryRight={() => <Text selectable={true}>{currentServer.v6_network}/{currentServer.v6_network_size}</Text>} />
                             </DrawerGroup>
-                            <DrawerGroup title="Storage" accessoryLeft={(props) => <Icon {...props} name='hard-drive-outline' />}>
-                                <DrawerGroup title="Block Storage">
-
-
-                                </DrawerGroup>
-                                <DrawerGroup title="Object Storage"></DrawerGroup>
-                            </DrawerGroup>
 
                             <DrawerGroup title="Usage" accessoryLeft={(props) => <Icon {...props} name='trending-up-outline' />}>
-                                <DrawerItem title="Bandwidth:"/>
+                                <DrawerItem title="Bandwidth:" />
                                 <DrawerItem activeOpacity={1.0} accessoryRight={progressBar} />
                                 <DrawerItem title="Charges" accessoryRight={() => <Text>$ {currentServer.pending_charges}</Text>} />
                             </DrawerGroup>
@@ -181,3 +160,18 @@ export const ServerDetails = ({ route, navigation }) => {
 
     }
 }
+
+const styles = StyleSheet.create({
+    subContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'stretch',
+        textAlign: 'center',
+        justifyContent: "space-between",
+        flexGrow: 1
+    },
+    menu: {
+        flex: 1,
+        margin: 8,
+    },
+});
