@@ -81,7 +81,6 @@ const BottomTabBar = ({ navigation, state }) => {
         >
             <BottomNavigationTab title='Servers' icon={props => <Icon {...props} name='hard-drive-outline' />} />
             <BottomNavigationTab title='DNS' icon={props => <Icon {...props} name='globe-2-outline' />} />
-            <BottomNavigationTab title='Load Balancers' icon={props => <Icon {...props} name='move-outline' />} />
             <BottomNavigationTab title='Settings' icon={props => <Icon {...props} name='settings-outline' />} />
         </BottomNavigation>
     </SafeAreaView>
@@ -94,7 +93,6 @@ const BottomTabNavigatior = ({ state }) => {
         <TabNavigator.Navigator tabBar={props => <BottomTabBar {...props} />}>
             <TabNavigator.Screen name='Home' component={HomeStackScreen} />
             <TabNavigator.Screen name='DNS' component={HomeStackScreen} />
-            <TabNavigator.Screen name='Load Balancers' component={HomeStackScreen} />
             <TabNavigator.Screen name='Settings' component={SettingsScreen} />
         </TabNavigator.Navigator>
     )
