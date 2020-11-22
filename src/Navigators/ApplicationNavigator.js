@@ -50,8 +50,11 @@ const HomeStackScreen = () => {
     );
 }
 const SettingsStackScreen = () => {
+    const theme = useTheme()
     return (
-        <SettingsStackNavigator.Navigator headerMode={"none"}>
+        <SettingsStackNavigator.Navigator headerMode={"none"} screenOptions={{
+            cardStyle: { backgroundColor: theme['background-basic-color-1'] }
+        }}>
             <SettingsStackNavigator.Screen
                 name="Settings"
                 component={SettingsScreen}
@@ -91,7 +94,7 @@ const BottomTabNavigatior = ({ state }) => {
     return (
         <TabNavigator.Navigator tabBar={props => <BottomTabBar {...props} />}>
             <TabNavigator.Screen name='Home' component={HomeStackScreen} />
-            <TabNavigator.Screen name='Settings' component={SettingsScreen} />
+            <TabNavigator.Screen name='Settings' component={SettingsStackScreen} />
         </TabNavigator.Navigator>
     )
 }

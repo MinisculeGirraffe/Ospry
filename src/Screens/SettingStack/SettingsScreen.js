@@ -6,33 +6,26 @@ import { StyleSheet } from 'react-native';
 import useApiLookup from '../../Hooks/UseAPILookup'
 import useMenuState from '../../Hooks/useMenuState'
 
-const goBack = () => (
-    <TopNavigationAction
-        icon={(props) => <Icon {...props} name='arrow-back-outline' />}
-        onPress={() => navigation.goBack()}
-    />
-)
-
 export const SettingsScreen = ({ navigation }) => {
     const auth = React.useContext(AuthContext)
     const [value, setValue] = React.useState('');
     const api = useApiLookup()
     return (
-        <Layout style={{ flex: 1 }} level='1'>
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1 }}edges={['left', 'right', 'top']}>
                 <TopNavigation
                     title={props => <Text  {...props}>{api.account.name}</Text>}
-                    accessoryLeft={goBack}
                     alignment="center"
                 />
-                <Layout style={styles.container}>
-                    <Menu style={styles.menu} >
+                <Layout style={{flex:1}}>
+                    <Menu  
+                    contentContainerStyle={{  }}
+                    >
                         <MenuItem title="Name"></MenuItem>
                         <MenuItem title="SSH Keys"></MenuItem>
                     </Menu>
                 </Layout>
             </SafeAreaView>
-        </Layout>
+     
     );
 };
 const styles = StyleSheet.create({

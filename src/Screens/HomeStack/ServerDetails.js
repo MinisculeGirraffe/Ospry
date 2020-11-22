@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Layout, Text, TopNavigation, TopNavigationAction, Spinner, Divider, OverflowMenu, MenuItem, Icon, DrawerGroup, Drawer, DrawerItem, useTheme, CheckBox, Button } from '@ui-kitten/components'
+import { Layout, Text, TopNavigation, TopNavigationAction, Spinner, Divider, OverflowMenu, Icon, MenuGroup, Menu, MenuItem, useTheme, CheckBox, Button } from '@ui-kitten/components'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, StyleSheet } from 'react-native'
 import useApiLookup from '../../Hooks/UseAPILookup'
@@ -98,54 +98,54 @@ export const ServerDetails = ({ route, navigation }) => {
                 />
                 <Divider />
                 <Layout style={{ flex: 1 }}>
-                    <ScrollView>
-                        <Drawer>
-                            <DrawerGroup title="Overview" accessoryLeft={(props) => <Icon {...props} name='monitor-outline' />}>
-                                <DrawerItem title="Label" accessoryRight={() => <Text>{currentServer.label}</Text>} />
-                                <DrawerItem title="CPU" accessoryRight={() => <Text>{currentServer.vcpu_count}</Text>} />
-                                <DrawerItem title="Memory" accessoryRight={() => <Text>{currentServer.ram}</Text>} />
-                                <DrawerItem title="Storage" accessoryRight={() => <Text>{currentServer.disk}</Text>} />
-                                <DrawerItem title="OS" accessoryRight={() => <Text>{currentServer.os}</Text>} />
-                                <DrawerItem title="Location" accessoryRight={() => <Text>{currentServer.location}</Text>} />
-                                <DrawerItem title="Username" accessoryRight={() => <Text>root</Text>} />
-                                <DrawerItem title="Password" accessoryRight={() => <Text>{currentServer.default_password}</Text>} />
-                                <DrawerItem title="KVM" accessoryRight={() => <Text onPress={() => appFunction.openLink(currentServer.kvm_url)} status={'info'}>link</Text>} />
-                                <DrawerItem title="SSH" accessoryRight={() => <Text onPress={() => appFunction.openLink('ssh://' + currentServer.main_ip)} status={'info'}>{currentServer.main_ip}</Text>} />
+                    
+                        <Menu>
+                            <MenuGroup title="Overview" accessoryLeft={(props) => <Icon {...props} name='monitor-outline' />}>
+                                <MenuItem title="Label" accessoryRight={() => <Text>{currentServer.label}</Text>} />
+                                <MenuItem title="CPU" accessoryRight={() => <Text>{currentServer.vcpu_count}</Text>} />
+                                <MenuItem title="Memory" accessoryRight={() => <Text>{currentServer.ram}</Text>} />
+                                <MenuItem title="Storage" accessoryRight={() => <Text>{currentServer.disk}</Text>} />
+                                <MenuItem title="OS" accessoryRight={() => <Text>{currentServer.os}</Text>} />
+                                <MenuItem title="Location" accessoryRight={() => <Text>{currentServer.location}</Text>} />
+                                <MenuItem title="Username" accessoryRight={() => <Text>root</Text>} />
+                                <MenuItem title="Password" accessoryRight={() => <Text>{currentServer.default_password}</Text>} />
+                                <MenuItem title="KVM" accessoryRight={() => <Text onPress={() => appFunction.openLink(currentServer.kvm_url)} status={'info'}>link</Text>} />
+                                <MenuItem title="SSH" accessoryRight={() => <Text onPress={() => appFunction.openLink('ssh://' + currentServer.main_ip)} status={'info'}>{currentServer.main_ip}</Text>} />
 
 
-                            </DrawerGroup>
-                            <DrawerGroup title="Network" accessoryLeft={(props) => <Icon {...props} name='globe-outline' />}>
-                                <DrawerItem title="Main IPv4" accessoryRight={() => <Text selectable={true} >{currentServer.main_ip}</Text>} />
-                                <DrawerItem title="Internal IPv4" accessoryRight={() => <Text selectable={true}>{currentServer.internal_ip}</Text>} />
-                                <DrawerItem title="Gateway IPv4" accessoryRight={() => <Text selectable={true}>{currentServer.gateway_v4}</Text>} />
-                                <DrawerItem title="Enable IPv6" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
-                                <DrawerItem title="Main IPv6" accessoryRight={() => <Text selectable={true}>{currentServer.v6_main_ip}</Text>} />
-                                <DrawerItem title="Subnet IPv6" accessoryRight={() => <Text selectable={true}>{currentServer.v6_network}/{currentServer.v6_network_size}</Text>} />
-                            </DrawerGroup>
+                            </MenuGroup>
+                            <MenuGroup title="Network" accessoryLeft={(props) => <Icon {...props} name='globe-outline' />}>
+                                <MenuItem title="Main IPv4" accessoryRight={() => <Text selectable={true} >{currentServer.main_ip}</Text>} />
+                                <MenuItem title="Internal IPv4" accessoryRight={() => <Text selectable={true}>{currentServer.internal_ip}</Text>} />
+                                <MenuItem title="Gateway IPv4" accessoryRight={() => <Text selectable={true}>{currentServer.gateway_v4}</Text>} />
+                                <MenuItem title="Enable IPv6" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
+                                <MenuItem title="Main IPv6" accessoryRight={() => <Text selectable={true}>{currentServer.v6_main_ip}</Text>} />
+                                <MenuItem title="Subnet IPv6" accessoryRight={() => <Text selectable={true}>{currentServer.v6_network}/{currentServer.v6_network_size}</Text>} />
+                            </MenuGroup>
 
-                            <DrawerGroup title="Usage" accessoryLeft={(props) => <Icon {...props} name='trending-up-outline' />}>
-                                <DrawerItem title="Bandwidth:" />
-                                <DrawerItem activeOpacity={1.0} accessoryRight={progressBar} />
-                                <DrawerItem title="Charges" accessoryRight={() => <Text>$ {currentServer.pending_charges}</Text>} />
-                            </DrawerGroup>
-                            <DrawerGroup title="Snapshots" accessoryLeft={(props) => <Icon {...props} name='camera-outline' />} >
-                                <DrawerItem title="Create Snapshot" accessoryRight={() => <Button>Create</Button>} />
-                                <DrawerItem title="Restore Snapshot" accessoryRight={() => <Button>Restore</Button>} />
-                            </DrawerGroup>
-                            <DrawerGroup title="Backups" accessoryLeft={(props) => <Icon {...props} name='save-outline' />}>
-                                <DrawerItem title="Auto Backup" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
-                                <DrawerItem title="Restore Snapshot" accessoryRight={() => <Button>Restore</Button>} />
-                                <DrawerItem title="Backup Schedule" accessoryRight={() => <Button>Restore</Button>} />
-                            </DrawerGroup>
-                            <DrawerGroup title='Settings' accessoryLeft={(props) => <Icon {...props} name='settings-2-outline' />}>
-                                <DrawerItem title="OS Change" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
-                                <DrawerItem title="App Change" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
-                                <DrawerItem title="Re-install OS" accessoryRight={() => <Button>Re-install</Button>} />
-                                <DrawerItem title="Upgrade Plan" accessoryRight={() => <Button>Re-install</Button>} />
-                            </DrawerGroup>
+                            <MenuGroup title="Usage" accessoryLeft={(props) => <Icon {...props} name='trending-up-outline' />}>
+                                <MenuItem title="Bandwidth:" />
+                                <MenuItem activeOpacity={1.0} accessoryRight={progressBar} />
+                                <MenuItem title="Charges" accessoryRight={() => <Text>$ {currentServer.pending_charges}</Text>} />
+                            </MenuGroup>
+                            <MenuGroup title="Snapshots" accessoryLeft={(props) => <Icon {...props} name='camera-outline' />} >
+                                <MenuItem title="Create Snapshot" accessoryRight={() => <Button>Create</Button>} />
+                                <MenuItem title="Restore Snapshot" accessoryRight={() => <Button>Restore</Button>} />
+                            </MenuGroup>
+                            <MenuGroup title="Backups" accessoryLeft={(props) => <Icon {...props} name='save-outline' />}>
+                                <MenuItem title="Auto Backup" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
+                                <MenuItem title="Restore Snapshot" accessoryRight={() => <Button>Restore</Button>} />
+                                <MenuItem title="Backup Schedule" accessoryRight={() => <Button>Restore</Button>} />
+                            </MenuGroup>
+                            <MenuGroup title='Settings' accessoryLeft={(props) => <Icon {...props} name='settings-2-outline' />}>
+                                <MenuItem title="OS Change" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
+                                <MenuItem title="App Change" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
+                                <MenuItem title="Re-install OS" accessoryRight={() => <Button>Re-install</Button>} />
+                                <MenuItem title="Upgrade Plan" accessoryRight={() => <Button>Re-install</Button>} />
+                            </MenuGroup>
 
-                        </Drawer>
-                    </ScrollView>
+                        </Menu>
+                   
 
                 </Layout>
             </SafeAreaView>
