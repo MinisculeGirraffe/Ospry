@@ -5,10 +5,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigation, BottomNavigationTab, useTheme, Icon } from '@ui-kitten/components';
 
 import { HomeScreen } from '../Screens/HomeStack/HomeScreen';
-import { SettingsScreen } from '../Screens/SettingStack/SettingsScreen';
-import { LoginScreen } from '../Screens/LoginScreen'
 import { ServerDetails } from '../Screens/HomeStack/ServerDetails'
 import { AddServerScreen } from '../Screens/HomeStack/AddServerScreen'
+
+import { SettingsScreen } from '../Screens/SettingStack/SettingsScreen';
+import {SshKeyScreen} from '../Screens/SettingStack/SshKeyScreen'
+
+import { LoginScreen } from '../Screens/LoginScreen'
+
 
 import { CardStyleInterpolators } from '@react-navigation/stack';
 
@@ -58,6 +62,10 @@ const SettingsStackScreen = () => {
             <SettingsStackNavigator.Screen
                 name="Settings"
                 component={SettingsScreen}
+            />
+            <SettingsStackNavigator.Screen
+                name="SshKeys"
+                component={SshKeyScreen}
             />
         </SettingsStackNavigator.Navigator>
     );

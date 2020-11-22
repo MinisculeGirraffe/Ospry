@@ -135,7 +135,7 @@ export default () => {
 
     const lookupUser = async () => {
         await auth.vultr.api.getInfo()
-        .then(data => setAccount(data))
+            .then(data => setAccount(data))
     }
 
     const refreshServerList = async () => {
@@ -145,37 +145,43 @@ export default () => {
     }
 
     const rebootServer = async (serverID) => {
-        auth.vultr.server.reboot({ SUBID: parseInt(serverID) })
+       await auth.vultr.server.reboot({ SUBID: parseInt(serverID) })
             .then(lookupServers())
     }
 
     const startServer = async (serverID) => {
-        auth.vultr.server.start({ SUBID: parseInt(serverID) })
+       await auth.vultr.server.start({ SUBID: parseInt(serverID) })
             .then(lookupServers())
     }
 
     const stopServer = async (serverID) => {
-        auth.vultr.server.halt({ SUBID: parseInt(serverID) })
+        await auth.vultr.server.halt({ SUBID: parseInt(serverID) })
             .then(lookupServers())
     }
 
     const createServer = async (obj) => {
-        auth.vultr.server.create()
+        await auth.vultr.server.create()
     }
 
-    const lookupSSHKeys = async => {
-        auth.vultr.sshkey.list()
-        .then(data => setSSHKeys(data))
+    const lookupSSHKeys = async () => {
+        await auth.vultr.sshkey.list()
+            .then((data) => {
+                let transform = []
+                const keys = Object.keys(data)
+                keys.forEach(key => transform.push(data[key]))
+                setSSHKeys(transform)
+
+            })
     }
 
     const enableBackup = async (serverID) => {
-        auth.vultr.server.enableBackup({ SUBID: parseInt(serverID) })
+       await auth.vultr.server.enableBackup({ SUBID: parseInt(serverID) })
             .then(data => console.log(data))
             .then(lookupServers())
             .catch(err => console.log(err))
     }
     const disableBackup = async (serverID) => {
-        auth.vultr.server.disableBackup({ SUBID: parseInt(serverID) })
+       await auth.vultr.server.disableBackup({ SUBID: parseInt(serverID) })
             .then(lookupServers())
     }
 
@@ -197,6 +203,7 @@ export default () => {
         enableBackup,
         disableBackup,
         lookupServerPlans,
+        lookupSSHKeys,
         serverObj,
         account,
         user,
