@@ -5,9 +5,10 @@ export default () => {
     const auth = React.useContext(AuthContext)
     const [serverObj, setServerObj] = React.useState([])
     const [user, setUser] = React.useState('')
+    const [account, setAccount] = React.useState('')
     const [isLoading, setIsLoading] = React.useState(false);
     const [isRefreshing, setIsRefreshing] = React.useState(false);
-
+    const [sshKeys, setSSHKeys] = React.useState();
     const [serverAvailability, setServerAvailability] = React.useState()
     const [serverLocations, setServerLocations] = React.useState()
     const [serverOS, setServerOS] = React.useState()
@@ -134,7 +135,7 @@ export default () => {
 
     const lookupUser = async () => {
         await auth.vultr.api.getInfo()
-            .then(data => setUser(data))
+            .then(data => setAccount(data))
     }
 
     const refreshServerList = async () => {
@@ -144,38 +145,50 @@ export default () => {
     }
 
     const rebootServer = async (serverID) => {
-        auth.vultr.server.reboot({ SUBID: parseInt(serverID) })
+       await auth.vultr.server.reboot({ SUBID: parseInt(serverID) })
             .then(lookupServers())
-
     }
 
     const startServer = async (serverID) => {
-        auth.vultr.server.start({ SUBID: parseInt(serverID) })
+       await auth.vultr.server.start({ SUBID: parseInt(serverID) })
             .then(lookupServers())
-
     }
 
     const stopServer = async (serverID) => {
-        auth.vultr.server.halt({ SUBID: parseInt(serverID) })
+        await auth.vultr.server.halt({ SUBID: parseInt(serverID) })
             .then(lookupServers())
+    }
 
+    const createServer = async (obj) => {
+        await auth.vultr.server.create()
+    }
+
+    const lookupSSHKeys = async () => {
+        await auth.vultr.sshkey.list()
+            .then((data) => {
+                let transform = []
+                const keys = Object.keys(data)
+                keys.forEach(key => transform.push(data[key]))
+                setSSHKeys(transform)
+
+            })
     }
 
     const enableBackup = async (serverID) => {
-        auth.vultr.server.enableBackup({ SUBID: parseInt(serverID) })
+       await auth.vultr.server.enableBackup({ SUBID: parseInt(serverID) })
             .then(data => console.log(data))
             .then(lookupServers())
             .catch(err => console.log(err))
     }
     const disableBackup = async (serverID) => {
-        auth.vultr.server.disableBackup({ SUBID: parseInt(serverID) })
+       await auth.vultr.server.disableBackup({ SUBID: parseInt(serverID) })
             .then(lookupServers())
     }
 
     React.useEffect(() => {
         const fetchInitalData = async () => {
             setIsLoading(true)
-            await Promise.all(lookupServers(), lookupUser())
+            await Promise.all(lookupServers(), lookupUser(), lookupSSHKeys())
                 .then(setIsLoading(false))
                 .catch(err => console.log(err))
         }
@@ -190,8 +203,11 @@ export default () => {
         enableBackup,
         disableBackup,
         lookupServerPlans,
+        lookupSSHKeys,
         serverObj,
+        account,
         user,
+        sshKeys,
         isLoading,
         isRefreshing,
         serverAvailability,

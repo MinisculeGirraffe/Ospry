@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Layout, Text, Card, Icon, } from '@ui-kitten/components';
-import { Alert } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import useApiLookup from '../Hooks/UseAPILookup'
 import { useNavigation } from '@react-navigation/native';
 import useAppFunction from "../Hooks/useAppFunction"
@@ -64,14 +64,7 @@ export default ServerItem = ({ server, index }) => {
 
     return (
         <Card status={serverStatus} onPress={() => nagivateServer()}>
-            <Layout style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                textAlign: 'center',
-                justifyContent: "space-between",
-                flexGrow: '1'
-            }}>
+            <Layout style={styles.container}>
                 <Text category={"h6"}>{server.label}</Text>
                 <Button
                     appearance='ghost'
@@ -80,14 +73,7 @@ export default ServerItem = ({ server, index }) => {
                     onPress={() => toggleState()}
                 />
             </Layout>
-            <Layout style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                textAlign: 'center',
-                flexGrow: '1',
-                justifyContent: "space-between"
-            }}>
+            <Layout style={styles.container}>
                 <Text category='c1'>{server.location} - {server.ram}</Text>
                 <Text onPress={() => appFunction.openLink('ssh://' + server.main_ip)} status={'info'} category='s1'> {server.main_ip}</Text>
             </Layout>
@@ -95,3 +81,14 @@ export default ServerItem = ({ server, index }) => {
         </Card>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'stretch',
+        textAlign: 'center',
+        flexGrow: 1,
+        justifyContent: "space-between"
+    }
+})

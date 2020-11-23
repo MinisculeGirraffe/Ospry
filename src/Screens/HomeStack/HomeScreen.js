@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Layout, TopNavigation, Text, List, Spinner, Divider, Avatar, TopNavigationAction, Icon } from '@ui-kitten/components';
-import useApiLookup from '../Hooks/UseAPILookup'
-import ServerItem from '../Components/ServerItem'
-import { RefreshControl } from '../Components/RefreshControl'
+import useApiLookup from '../../Hooks/UseAPILookup'
+import ServerItem from '../../Components/ServerItem'
+import { RefreshControl } from '../../Components/RefreshControl'
 
 
 
@@ -29,7 +29,7 @@ export const HomeScreen = ({ navigation }) => {
         return (
             <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'top']} >
                 <TopNavigation
-                    title={props => <Text {...props}>{api.user.name}</Text>}
+                    title={props => <Text {...props}>{api.account.name}</Text>}
                     accessoryLeft={userAvatar}
                     accessoryRight={addNewServer}
                 />

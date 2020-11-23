@@ -4,11 +4,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigation, BottomNavigationTab, useTheme, Icon } from '@ui-kitten/components';
 
-import { HomeScreen } from '../Screens/HomeScreen';
-import { SettingsScreen } from '../Screens/SettingsScreen';
+import { HomeScreen } from '../Screens/HomeStack/HomeScreen';
+import { ServerDetails } from '../Screens/HomeStack/ServerDetails'
+import { AddServerScreen } from '../Screens/HomeStack/AddServerScreen'
+
+import { SettingsScreen } from '../Screens/SettingStack/SettingsScreen';
+import {SshKeyScreen} from '../Screens/SettingStack/SshKeyScreen'
+
 import { LoginScreen } from '../Screens/LoginScreen'
-import { ServerDetails } from '../Screens/ServerDetails'
-import { AddServerScreen } from '../Screens/AddServerScreen'
+
 
 import { CardStyleInterpolators } from '@react-navigation/stack';
 
@@ -50,11 +54,18 @@ const HomeStackScreen = () => {
     );
 }
 const SettingsStackScreen = () => {
+    const theme = useTheme()
     return (
-        <SettingsStackNavigator.Navigator headerMode={"none"}>
+        <SettingsStackNavigator.Navigator headerMode={"none"} screenOptions={{
+            cardStyle: { backgroundColor: theme['background-basic-color-1'] }
+        }}>
             <SettingsStackNavigator.Screen
                 name="Settings"
                 component={SettingsScreen}
+            />
+            <SettingsStackNavigator.Screen
+                name="SshKeys"
+                component={SshKeyScreen}
             />
         </SettingsStackNavigator.Navigator>
     );
@@ -80,8 +91,6 @@ const BottomTabBar = ({ navigation, state }) => {
             onSelect={index => navigation.navigate(state.routeNames[index])}
         >
             <BottomNavigationTab title='Servers' icon={props => <Icon {...props} name='hard-drive-outline' />} />
-            <BottomNavigationTab title='DNS' icon={props => <Icon {...props} name='globe-2-outline' />} />
-            <BottomNavigationTab title='Load Balancers' icon={props => <Icon {...props} name='move-outline' />} />
             <BottomNavigationTab title='Settings' icon={props => <Icon {...props} name='settings-outline' />} />
         </BottomNavigation>
     </SafeAreaView>
@@ -93,9 +102,7 @@ const BottomTabNavigatior = ({ state }) => {
     return (
         <TabNavigator.Navigator tabBar={props => <BottomTabBar {...props} />}>
             <TabNavigator.Screen name='Home' component={HomeStackScreen} />
-            <TabNavigator.Screen name='DNS' component={HomeStackScreen} />
-            <TabNavigator.Screen name='Load Balancers' component={HomeStackScreen} />
-            <TabNavigator.Screen name='Settings' component={SettingsScreen} />
+            <TabNavigator.Screen name='Settings' component={SettingsStackScreen} />
         </TabNavigator.Navigator>
     )
 }

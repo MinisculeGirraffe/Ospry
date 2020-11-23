@@ -3,13 +3,13 @@ import { Layout, TopNavigation, TopNavigationAction, Icon, Divider, Text, Select
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet, ScrollView } from 'react-native'
 import Collapsible from 'react-native-collapsible';
-import useApiLookup from '../Hooks/UseAPILookup'
-
+import useApiLookup from '../../Hooks/UseAPILookup'
+import useMenuState from '../../Hooks/useMenuState'
 export const AddServerScreen = ({ navigation }) => {
 
     const [selectedType, setSelectedType] = React.useState("");
     const [selectedTypeIndex, setSelectedTypeIndex] = React.useState("");
-
+    
     const [availServerPlans, setAvailServerPlans] = React.useState([])
     const [selectedPlan, setSelectedPlan] = React.useState("")
     const [selectedPlanIndex, setSelectedPlanIndex] = React.useState("")
