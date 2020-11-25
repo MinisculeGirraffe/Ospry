@@ -20,7 +20,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "red.nor.eagle"
+      "bundleIdentifier": "red.nor.ospry"
     },
     "web": {
       "favicon": "./assets/favicon.png"
