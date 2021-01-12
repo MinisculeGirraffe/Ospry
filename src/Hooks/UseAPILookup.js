@@ -30,18 +30,6 @@ export default () => {
                     data[key].auto_backups = false
                 }
 
-                /*
-                let backups = await auth.vultr.backup.list({ SUBID: Number(data[key].SUBID) })
-                let backupKeys = Object.keys(backups)
-                let backupArr = []
-                if (backupKeys.length > 0) {
-                    for await (const backup of backupKeys) {
-                        backupArr.push(backups[backup])
-                    }
-                    data[key].backups = BackupArr
-                    console.log(data[key].backups)
-                } */
-
                 arr.push(data[key])
             }
             return arr
@@ -155,8 +143,10 @@ export default () => {
     }
 
     const stopServer = async (serverID) => {
+        console.log(serverID)
         await auth.vultr.server.halt({ SUBID: parseInt(serverID) })
-            .then(lookupServers())
+            .then(data => console.log(data))
+            .catch(err => console.log(err))
     }
 
     const createServer = async (obj) => {

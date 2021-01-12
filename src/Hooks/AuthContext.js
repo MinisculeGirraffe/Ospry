@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import * as VultrNode from '@vultr/vultr-node'
 export const AuthContext = React.createContext({});
 
-
 export const AuthProvider = ({ children }) => {
     const [apiKey, setApiKey] = React.useState();
     const [vultr, SetVultrKey] = React.useState();
@@ -30,6 +29,7 @@ export const AuthProvider = ({ children }) => {
             .then(() => {
                 setApiKey(userToken);
             })
+            .catch(setApiKey(null))
 
     }
 

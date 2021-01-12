@@ -18,7 +18,11 @@ export const SettingsScreen = ({ navigation }) => {
             />
             <Layout style={{ flex: 1 }} >
                 <Menu >
-                    <MenuGroup title="Overview" accessoryLeft={(props) => <Icon {...props} name='monitor-outline' />} />
+                    <MenuGroup title="Account" 
+                    accessoryLeft={(props) => <Icon {...props} name='person-outline' />}
+                    accessoryRight={(props) => <Icon {...props} name='arrow-forward-outline' />}
+                    onPress={() => navigation.navigate('AccountSettings')}
+                    />
                     <MenuItem title="SSH Keys"
                         accessoryLeft={(props) => <Icon {...props} name='unlock-outline' />}
                         accessoryRight={(props) => <Icon {...props} name='arrow-forward-outline' />}

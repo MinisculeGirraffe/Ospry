@@ -5,6 +5,9 @@ import { StyleSheet, ScrollView } from 'react-native'
 import Collapsible from 'react-native-collapsible';
 import useApiLookup from '../../Hooks/UseAPILookup'
 import useMenuState from '../../Hooks/useMenuState'
+
+import {NavigateBackAction} from '../../Components/NavigateBackAction'
+
 export const AddServerScreen = ({ navigation }) => {
 
     const [selectedType, setSelectedType] = React.useState("");
@@ -125,13 +128,6 @@ export const AddServerScreen = ({ navigation }) => {
         }
     })
 
-
-    const goBack = () => (
-        <TopNavigationAction
-            icon={(props) => <Icon {...props} name='arrow-back-outline' />}
-            onPress={() => navigation.goBack()}
-        />
-    )
     const addServer = () => (
         <TopNavigationAction
             icon={(props) => <Icon {...props} name='plus-outline' />}
@@ -141,10 +137,9 @@ export const AddServerScreen = ({ navigation }) => {
 
     if (api.serverAvailability && api.serverOS && api.serverLocations) {
         return (
-
             <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'top']} >
                 <TopNavigation
-                    accessoryLeft={goBack}
+                    accessoryLeft={props => <NavigateBackAction {...props}/>}
                     title={props => <Text  {...props}>New Server</Text>}
                     alignment="center"
                     subtitle={props => <Text {...props} category={'label'}>{selectedPlan !== "" ? "$" + selectedPlan.price_per_month + " / Month" : ""}</Text>}

@@ -24,7 +24,6 @@ export default () => {
       <IconRegistry icons={EvaIconsPack} />
       <AppearanceProvider>
         <SafeAreaProvider>
-
           <ApplicationProvider {...eva} theme={colorScheme == "dark" ? eva.dark : eva.light} >
             <StatusBar style='auto' />
             <AuthProvider>
@@ -32,10 +31,8 @@ export default () => {
               </AppNavigator>
             </AuthProvider>
           </ApplicationProvider>
-
         </SafeAreaProvider>
       </AppearanceProvider>
-
     </>
   )
 }

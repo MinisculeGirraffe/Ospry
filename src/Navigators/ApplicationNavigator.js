@@ -9,7 +9,9 @@ import { ServerDetails } from '../Screens/HomeStack/ServerDetails'
 import { AddServerScreen } from '../Screens/HomeStack/AddServerScreen'
 
 import { SettingsScreen } from '../Screens/SettingStack/SettingsScreen';
-import {SshKeyScreen} from '../Screens/SettingStack/SshKeyScreen'
+import { SshKeyScreen } from '../Screens/SettingStack/SshKeyScreen'
+import { AddSSHKeyScreen } from '../Screens/SettingStack/AddSSHKeyScreen'
+import { AccountScreen } from '../Screens/SettingStack/AccountScreen';
 
 import { LoginScreen } from '../Screens/LoginScreen'
 
@@ -18,7 +20,6 @@ import { CardStyleInterpolators } from '@react-navigation/stack';
 
 import AuthContext from '../Hooks/AuthContext'
 import { SafeAreaView } from 'react-native';
-
 
 
 const TabNavigator = createBottomTabNavigator();
@@ -45,7 +46,7 @@ const HomeStackScreen = () => {
                 options={{
                     cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
                     gestureDirection: "vertical",
-                    
+
                 }}
                 name="Add"
                 component={AddServerScreen}
@@ -67,6 +68,14 @@ const SettingsStackScreen = () => {
                 name="SshKeys"
                 component={SshKeyScreen}
             />
+            <SettingsStackNavigator.Screen
+                name="AccountSettings"
+                component={AccountScreen}
+            />
+            <SettingsStackNavigator.Screen
+                name="AddSSHKeyScreen"
+                component={AddSSHKeyScreen}
+            />
         </SettingsStackNavigator.Navigator>
     );
 }
@@ -84,16 +93,16 @@ const LoginStackScreen = () => {
 
 const BottomTabBar = ({ navigation, state }) => {
     const theme = useTheme()
-    return(
-        <SafeAreaView style={{backgroundColor: theme['background-basic-color-1']}}>
-        <BottomNavigation
-            selectedIndex={state.index}
-            onSelect={index => navigation.navigate(state.routeNames[index])}
-        >
-            <BottomNavigationTab title='Servers' icon={props => <Icon {...props} name='hard-drive-outline' />} />
-            <BottomNavigationTab title='Settings' icon={props => <Icon {...props} name='settings-outline' />} />
-        </BottomNavigation>
-    </SafeAreaView>
+    return (
+        <SafeAreaView style={{ backgroundColor: theme['background-basic-color-1'] }}>
+            <BottomNavigation
+                selectedIndex={state.index}
+                onSelect={index => navigation.navigate(state.routeNames[index])}
+            >
+                <BottomNavigationTab title='Servers' icon={props => <Icon {...props} name='hard-drive-outline' />} />
+                <BottomNavigationTab title='Settings' icon={props => <Icon {...props} name='settings-outline' />} />
+            </BottomNavigation>
+        </SafeAreaView>
     )
 
 }
