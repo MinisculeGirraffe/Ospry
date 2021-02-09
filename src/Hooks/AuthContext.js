@@ -16,11 +16,11 @@ export const AuthProvider = ({ children }) => {
                     setApiKey(userToken)
                 }
             })
-    },[apiKey])
+    }, [apiKey])
 
     const saveApiKey = async (userToken) => {
         let test = VultrNode.initialize({ apiKey: userToken })
-        test.api.getInfo()
+        test.account.getAccountInfo()
             .then((data) => {
                 if (Object.keys(data).length > 0) {
                     AsyncStorage.setItem('userToken', userToken)
@@ -32,7 +32,6 @@ export const AuthProvider = ({ children }) => {
             .catch(setApiKey(null))
 
     }
-
     const deleteApiKey = () => {
         AsyncStorage.removeItem('userToken')
             .then(() => {

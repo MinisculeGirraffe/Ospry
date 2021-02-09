@@ -34,8 +34,8 @@ export default () => {
             }
             return arr
         }
-        await auth.vultr.server.list()
-            .then(data => { return transformData(data) })
+        await auth.vultr.instances.listInstances()
+            .then(data => { return transformData(data.instances) })
             .then((data) => { setServerObj(data) })
             .catch(err => console.log(err))
     }
@@ -95,20 +95,20 @@ export default () => {
             return results
         }
 
-        await auth.vultr.plans.list({ type: "all" })
+        await auth.vultr.plans.listPlans({ type: "all" })
             .then((data) => {
                 return transformPlans(data)
             })
             .then(data => {
                 setServerAvailability(data)
-                return auth.vultr.regions.list()
+                return auth.vultr.regions.listRegions()
             })
             .then((data) => {
                 return transformLocations(data)
             })
             .then(data => {
                 setServerLocations(data)
-                return auth.vultr.os.list()
+                return auth.vultr.operatingSystems.listImages()
             })
             .then(data => {
                 return transformOS(data)
@@ -122,8 +122,8 @@ export default () => {
 
 
     const lookupUser = async () => {
-        await auth.vultr.api.getInfo()
-            .then(data => setAccount(data))
+        await auth.vultr.account.getAccountInfo()
+            .then(data => setAccount(data.account))
     }
 
     const refreshServerList = async () => {
@@ -132,19 +132,19 @@ export default () => {
             .then(setIsRefreshing(false))
     }
 
-    const rebootServer = async (serverID) => {
-       await auth.vultr.server.reboot({ SUBID: parseInt(serverID) })
+    const rebootServer = async (instanceID) => {
+       await auth.vultr.instances.rebootInstance(instanceID)
             .then(lookupServers())
     }
 
-    const startServer = async (serverID) => {
-       await auth.vultr.server.start({ SUBID: parseInt(serverID) })
+    const startServer = async (instanceID) => {
+       await auth.vultr.instances.startInstance(instanceID)
             .then(lookupServers())
     }
 
-    const stopServer = async (serverID) => {
+    const stopServer = async (instanceID) => {
         console.log(serverID)
-        await auth.vultr.server.halt({ SUBID: parseInt(serverID) })
+        await auth.vultr.instances.haltInstance(instanceID)
             .then(data => console.log(data))
             .catch(err => console.log(err))
     }
@@ -154,25 +154,15 @@ export default () => {
     }
 
     const lookupSSHKeys = async () => {
-        await auth.vultr.sshkey.list()
-            .then((data) => {
-                let transform = []
-                const keys = Object.keys(data)
-                keys.forEach(key => transform.push(data[key]))
-                setSSHKeys(transform)
-
-            })
+       const keys =  await auth.vultr.sshKeys.listSshKeys()
+        setSSHKeys(keys.ssh_keys)
     }
+    const addSSHKey = async (name,key) => {
+        console.log([name,key])
+        const res = await auth.vultr.sshKeys.createSshKey({name: name, ssh_key: key})
 
-    const enableBackup = async (serverID) => {
-       await auth.vultr.server.enableBackup({ SUBID: parseInt(serverID) })
-            .then(data => console.log(data))
-            .then(lookupServers())
-            .catch(err => console.log(err))
-    }
-    const disableBackup = async (serverID) => {
-       await auth.vultr.server.disableBackup({ SUBID: parseInt(serverID) })
-            .then(lookupServers())
+        await lookupSSHKeys()
+
     }
 
     React.useEffect(() => {
@@ -190,10 +180,9 @@ export default () => {
         rebootServer,
         stopServer,
         startServer,
-        enableBackup,
-        disableBackup,
         lookupServerPlans,
         lookupSSHKeys,
+        addSSHKey,
         serverObj,
         account,
         user,

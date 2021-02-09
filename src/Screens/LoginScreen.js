@@ -4,20 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthContext from '../Hooks/AuthContext'
 import { Keyboard } from 'react-native'
 import * as WebBrowser from 'expo-web-browser';
+import {useInputState} from '../Hooks/useInputState'
 
 export const LoginScreen = ({ navigation }) => {
-    const [value, setValue] = React.useState('');
+    const apiKeyText = useInputState()
     const auth = React.useContext(AuthContext)
-    React.useEffect(() => {
-        Keyboard.addListener("keyboardDidShow");
-        Keyboard.addListener("keyboardDidHide");
-
-        // cleanup function
-        return () => {
-            Keyboard.removeListener("keyboardDidShow");
-            Keyboard.removeListener("keyboardDidHide");
-        };
-    }, []);
+    
     _handlePressButtonAsync = async () => {
         let result = await WebBrowser.openBrowserAsync('https://my.vultr.com/settings/#settingsapi');
       };
@@ -25,13 +17,13 @@ export const LoginScreen = ({ navigation }) => {
         <SafeAreaView style={{flex:1}}>
             <Layout style={{ flex: 1,  alignItems: 'center', }}>
                 <Input
-                    value={value}
+                    value={apiKeyText}
                     placeholder='API Key'
-                    onChangeText={nextValue => setValue(nextValue)}
+                    {...apiKeyText}
                 />
                 <Layout style={{flexDirection: "row",alignItems: "center" , alignSelf: "stretch" , justifyContent: "space-evenly"}}>
                 <Button
-                    onPress={() => auth.saveApiKey(value)}
+                    onPress={() => auth.saveApiKey(apiKeyText)}
                 > Sign in</Button>
                  <Button title="Open WebBrowser" onPress={_handlePressButtonAsync}> Get API Key </Button>
                 </Layout>

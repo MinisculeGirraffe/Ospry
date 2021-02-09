@@ -1,19 +1,30 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Layout, Text, TopNavigation, TopNavigationAction, Icon, Input } from '@ui-kitten/components'
-import useApiLookup from '../../Hooks/UseAPILookup'
 import { NavigateBackAction } from '../../Components/NavigateBackAction'
 import {useInputState} from '../../Hooks/useInputState'
+import UseAPILookup from '../../Hooks/UseAPILookup';
+
 
 export const AddSSHKeyScreen = ({ navigation }) => {
+    const api = UseAPILookup()
     const SSHKeyName = useInputState()
     const SSHKey = useInputState()
+    const [allowedSubmit,setAllowedSubmit] = React.useState()
+     React.useEffect(() => {
+       let falsyLength = [SSHKey.value,SSHKeyName.value].filter(i => i)
+       falsyLength.length == 2 ? setAllowedSubmit(true) : setAllowedSubmit(false)
+    },[SSHKey.value,SSHKeyName.value])
 
     const renderRightActions = () => (
         <React.Fragment>
             <TopNavigationAction
-                icon={props => <Icon {...props} name='plus-outline' />}
-                onPress={() => navigation.navigate('AddSSHKeyScreen')}
+                disabled={!allowedSubmit}
+                icon={props => <Icon  {...props} name='plus-outline' />}
+                onPress={async () => {
+                    await api.addSSHKey(SSHKeyName.value,SSHKey.value)
+                    navigation.goBack()
+                }}
             />
         </React.Fragment>
     )

@@ -73,6 +73,7 @@ export const ServerDetails = ({ route, navigation }) => {
             />
         )
     }
+    /*
 
     const autoBackupToggle = () => {
         if (autoBackup == true) {
@@ -84,7 +85,7 @@ export const ServerDetails = ({ route, navigation }) => {
         }
     }
 
-
+*/
     if (currentServer) {
 
         return (
@@ -118,7 +119,7 @@ export const ServerDetails = ({ route, navigation }) => {
                                 <MenuItem title="Main IPv4" accessoryRight={() => <Text selectable={true} >{currentServer.main_ip}</Text>} />
                                 <MenuItem title="Internal IPv4" accessoryRight={() => <Text selectable={true}>{currentServer.internal_ip}</Text>} />
                                 <MenuItem title="Gateway IPv4" accessoryRight={() => <Text selectable={true}>{currentServer.gateway_v4}</Text>} />
-                                <MenuItem title="Enable IPv6" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
+                               
                                 <MenuItem title="Main IPv6" accessoryRight={() => <Text selectable={true}>{currentServer.v6_main_ip}</Text>} />
                                 <MenuItem title="Subnet IPv6" accessoryRight={() => <Text selectable={true}>{currentServer.v6_network}/{currentServer.v6_network_size}</Text>} />
                             </MenuGroup>
@@ -133,13 +134,11 @@ export const ServerDetails = ({ route, navigation }) => {
                                 <MenuItem title="Restore Snapshot" accessoryRight={() => <Button>Restore</Button>} />
                             </MenuGroup>
                             <MenuGroup title="Backups" accessoryLeft={(props) => <Icon {...props} name='save-outline' />}>
-                                <MenuItem title="Auto Backup" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
+                              
                                 <MenuItem title="Restore Snapshot" accessoryRight={() => <Button>Restore</Button>} />
                                 <MenuItem title="Backup Schedule" accessoryRight={() => <Button>Restore</Button>} />
                             </MenuGroup>
                             <MenuGroup title='Settings' accessoryLeft={(props) => <Icon {...props} name='settings-2-outline' />}>
-                                <MenuItem title="OS Change" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
-                                <MenuItem title="App Change" accessoryRight={() => <CheckBox checked={currentServer.auto_backups} />} />
                                 <MenuItem title="Re-install OS" accessoryRight={() => <Button>Re-install</Button>} />
                                 <MenuItem title="Upgrade Plan" accessoryRight={() => <Button>Re-install</Button>} />
                             </MenuGroup>

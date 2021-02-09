@@ -74,7 +74,7 @@ export default ServerItem = ({ server, index }) => {
                 />
             </Layout>
             <Layout style={styles.container}>
-                <Text category='c1'>{server.location} - {server.ram}</Text>
+                <Text category='c1'>{server.region.toUpperCase()} - {server.ram} MB</Text>
                 <Text onPress={() => appFunction.openLink('ssh://' + server.main_ip)} status={'info'} category='s1'> {server.main_ip}</Text>
             </Layout>
 
